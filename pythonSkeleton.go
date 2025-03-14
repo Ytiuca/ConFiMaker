@@ -25,11 +25,14 @@ func newPythonSkeleton() *PythonSkeleton {
 			"\t\tsuper().__init__(fg_color, **kwargs)" +
 			"\n",
 		[]string{},
-		"\t\tself.mainloop()",
+		"\t\tself.mainloop()\n" +
+			"Skeleton()",
 		map[string]string{
 			"checkbox": "CTkCheckBox",
 			"entry":    "CTkEntry",
 			"input":    "CTkEntry",
+			"button":   "CTkButton",
+			"slider":   "CTkSlider",
 		},
 	}
 }
