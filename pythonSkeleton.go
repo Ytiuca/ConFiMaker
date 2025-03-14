@@ -37,18 +37,14 @@ func newPythonSkeleton() *PythonSkeleton {
 	}
 }
 
-func (ps *PythonSkeleton) CreatePythonFile() {
-	path := "./generatedPythonFile.py"
-	err := os.Remove(path)
-
-	if err != nil {
-		log.Fatalf("Erreur lors de la supression du fichier %s", err)
-	}
+func (ps *PythonSkeleton) CreatePythonFile(filename string) {
+	path := "./" + filename + ".py"
+	os.Remove(path)
 
 	file, err := os.Create(path)
 
 	if err != nil {
-		log.Fatalf("Erreur lors de la création du fichier %s", err)
+		log.Fatalf("Erreur lors de la création du fichier %s. %s", path, err)
 	}
 
 	defer file.Close()
@@ -61,7 +57,7 @@ func (ps *PythonSkeleton) CreatePythonFile() {
 		if exists {
 			file.WriteString("\t\t" + f + "(self).pack()\n")
 		} else {
-			log.Printf("erreur lors de la conversion de %s en un composant customTkinter", field)
+			log.Printf("erreur lors de la conversion de '%s' en un composant customTkinter", field)
 		}
 	}
 
@@ -86,20 +82,20 @@ func (ps *PythonSkeleton) GetFields() {
 	}
 }
 
-func (ps *PythonSkeleton) Build() {
-	cmd := exec.Command("pyinstaller", "--onefile", "--noconsole", "./generatedPythonFile.py")
+func (ps *PythonSkeleton) Build(filename string) {
+	cmd := exec.Command("pyinstaller", "--onefile", "--noconsole", "./"+filename+".py")
 	_, err := cmd.Output()
 
 	if err != nil {
 		log.Fatalf("Erreur lors de la compilation de l'interface graphique %s", err)
 	}
 
-	err = os.Rename("dist/generatedPythonFile.exe", "./generatedPythonFile.exe")
+	err = os.Rename("dist/"+filename+".exe", "./"+filename+".exe")
 
 	if err != nil {
 		log.Fatalf("Erreur lors du déplacement de l'interface graphique compilée dans le dossier local %s", err)
 	}
 
-	removeFileAndDir([]string{"build", "dist", "generatedPythonFile.spec"})
+	removeFileAndDir([]string{"build", "dist", "./" + filename + ".spec", "./" + filename + ".py"})
 
 }
