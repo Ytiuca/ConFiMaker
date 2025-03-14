@@ -100,29 +100,6 @@ func (ps *PythonSkeleton) Build() {
 		log.Fatalf("Erreur lors du déplacement de l'interface graphique compilée dans le dossier local %s", err)
 	}
 
-	err = os.RemoveAll("build")
+	removeFileAndDir([]string{"build", "dist", "generatedPythonFile.spec"})
 
-	if err != nil {
-		log.Fatalf("Erreur lors de la suppression du dossier de build %s", err)
-	}
-
-	err = os.RemoveAll("dist")
-
-	if err != nil {
-		log.Fatalf("Erreur lors de la suppression du dossier dist %s", err)
-	}
-
-	err = os.Remove("generatedPythonFile.spec")
-
-	if err != nil {
-		log.Fatalf("Erreur lors de la suppression du dossier de spec %s", err)
-	}
-
-}
-
-func main() {
-	ps := newPythonSkeleton()
-	ps.GetFields()
-	ps.CreatePythonFile()
-	ps.Build()
 }
