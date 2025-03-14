@@ -25,7 +25,8 @@ func newPythonSkeleton() *PythonSkeleton {
 			"\t\tsuper().__init__(fg_color, **kwargs)" +
 			"\n",
 		[]string{},
-		"\t\tself.mainloop()\n" +
+		"\t\tCTkButton(self,text=\"Run\",command=run).pack()\n" +
+			"\t\tself.mainloop()\n" +
 			"Skeleton()",
 		map[string]string{
 			"checkbox": "CTkCheckBox",
@@ -82,7 +83,7 @@ func (ps *PythonSkeleton) GetFields() {
 	}
 }
 
-func (ps *PythonSkeleton) Build(filename string) {
+func (ps *PythonSkeleton) Build(filename string, deleteBuildFiles bool) {
 	cmd := exec.Command("pyinstaller", "--onefile", "--noconsole", "./"+filename+".py")
 	_, err := cmd.Output()
 
@@ -96,6 +97,8 @@ func (ps *PythonSkeleton) Build(filename string) {
 		log.Fatalf("Erreur lors du déplacement de l'interface graphique compilée dans le dossier local %s", err)
 	}
 
-	removeFileAndDir([]string{"build", "dist", "./" + filename + ".spec", "./" + filename + ".py"})
+	if deleteBuildFiles {
+		removeFileAndDir([]string{"build", "dist", "./" + filename + ".spec", "./" + filename + ".py"})
+	}
 
 }
