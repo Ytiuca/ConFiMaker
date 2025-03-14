@@ -2,9 +2,9 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
+	"os/exec"
 )
 
 type PythonSkeleton struct {
@@ -86,9 +86,43 @@ func (ps *PythonSkeleton) GetFields() {
 	}
 }
 
+func (ps *PythonSkeleton) Build() {
+	cmd := exec.Command("pyinstaller", "--onefile", "--noconsole", "./generatedPythonFile.py")
+	_, err := cmd.Output()
+
+	if err != nil {
+		log.Fatalf("Erreur lors de la compilation de l'interface graphique %s", err)
+	}
+
+	err = os.Rename("dist/generatedPythonFile.exe", "./generatedPythonFile.exe")
+
+	if err != nil {
+		log.Fatalf("Erreur lors du déplacement de l'interface graphique compilée dans le dossier local %s", err)
+	}
+
+	err = os.RemoveAll("build")
+
+	if err != nil {
+		log.Fatalf("Erreur lors de la suppression du dossier de build %s", err)
+	}
+
+	err = os.RemoveAll("dist")
+
+	if err != nil {
+		log.Fatalf("Erreur lors de la suppression du dossier dist %s", err)
+	}
+
+	err = os.Remove("generatedPythonFile.spec")
+
+	if err != nil {
+		log.Fatalf("Erreur lors de la suppression du dossier de spec %s", err)
+	}
+
+}
+
 func main() {
 	ps := newPythonSkeleton()
 	ps.GetFields()
-	fmt.Println(ps.fields)
 	ps.CreatePythonFile()
+	ps.Build()
 }
