@@ -6,7 +6,7 @@
 
 - Go 1.23.5 (used to read the description file and write the python GUI)
 - python 3.12 (used to create the GUI with customtkinter (`pip install customtkinter`))
-- pyinstaller (`pip install pyinstaller`)
+- pyinstaller (used to compile le GUI (`pip install pyinstaller`))
 
 ## How to use
 
@@ -25,9 +25,21 @@ You have to describe what your GUI will looks like.
 - button
 - slider
 
-#### Available components options
+#### Checkbox
 
-TODO
+If you want to use a checkbox you have to define it this way:
+
+    checkbox nameOfTheAttribute defaultValue
+
+where:
+
+`checkbox` is the type of the widget you want
+
+`nameOfTheAttribute` is the name of the attribute that will be display in the GUI and given as argument to the program you want to start
+
+`defaultValue` is the default value of the checkbox `0` unchecked, `1` checked
+
+![example of checkbox definition](assets/checkboxDefinition.png)
 
 ### Step 3 - create a GUI
 
@@ -37,7 +49,7 @@ execute the generated executable `ConFiMaker.exe` in the terminal of your choice
 
 #### Available options
 
-![available options](assets/image.png)
+![availableOptions](assets/availableOptions.png)
 
 ### Step 4 - Execute your GUI
 

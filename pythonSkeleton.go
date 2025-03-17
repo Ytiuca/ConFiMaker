@@ -5,29 +5,20 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strconv"
+	"strings"
 )
 
 type PythonSkeleton struct {
-	beginning       string
-	fields          []string
-	ending          string
+	widgets         []Widget
+	command         string
 	correspondances map[string]string
 }
 
-func newPythonSkeleton() *PythonSkeleton {
+func newPythonSkeleton(command string) *PythonSkeleton {
 	return &PythonSkeleton{
-		"from customtkinter import *" +
-			"\n" +
-			"class Skeleton(CTk):" +
-			"\n" +
-			"\tdef __init__(self, fg_color=None, **kwargs):" +
-			"\n" +
-			"\t\tsuper().__init__(fg_color, **kwargs)" +
-			"\n",
-		[]string{},
-		"\t\tCTkButton(self,text=\"Run\",command=run).pack()\n" +
-			"\t\tself.mainloop()\n" +
-			"Skeleton()",
+		[]Widget{},
+		command,
 		map[string]string{
 			"checkbox": "CTkCheckBox",
 			"entry":    "CTkEntry",
@@ -50,19 +41,7 @@ func (ps *PythonSkeleton) CreatePythonFile(filename string) {
 
 	defer file.Close()
 
-	file.WriteString(ps.beginning)
-
-	for _, field := range ps.fields {
-		f, exists := ps.correspondances[field]
-
-		if exists {
-			file.WriteString("\t\t" + f + "(self).pack()\n")
-		} else {
-			log.Printf("erreur lors de la conversion de '%s' en un composant customTkinter", field)
-		}
-	}
-
-	file.WriteString(ps.ending)
+	file.WriteString(ps.ToPython())
 }
 
 func (ps *PythonSkeleton) GetFields() {
@@ -79,7 +58,9 @@ func (ps *PythonSkeleton) GetFields() {
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
-		ps.fields = append(ps.fields, scanner.Text())
+		attributes := strings.Split(scanner.Text(), " ")
+		widget := ToWidget(attributes)
+		ps.widgets = append(ps.widgets, widget)
 	}
 }
 
@@ -101,4 +82,97 @@ func (ps *PythonSkeleton) Build(filename string, deleteBuildFiles bool) {
 		removeFileAndDir([]string{"build", "dist", "./" + filename + ".spec", "./" + filename + ".py"})
 	}
 
+}
+
+func ToWidget(attributes []string) Widget {
+	widgetType := attributes[0]
+	widgetLabel := attributes[1]
+	widgetOptions := attributes[2:]
+
+	switch widgetType {
+	case "checkbox":
+		isChecked, err := strconv.ParseBool(widgetOptions[0])
+		if err != nil {
+			isChecked = false
+		}
+		return newCheckbox(widgetLabel, isChecked)
+	default:
+		log.Fatalf("Erreur. Ce type de widget n'est pas encore pris en charge: %s", widgetType)
+		return nil
+	}
+}
+
+func (ps *PythonSkeleton) ToPython() string {
+	return ps.CreateImport() +
+		ps.CreateClass() +
+		ps.CreateInitFunc() +
+		ps.CreateRunFunc() +
+		"Skeleton()"
+}
+
+func (ps *PythonSkeleton) CreateRunFunc() string {
+	splitedCommand := strings.Split(ps.command, " ")
+	command := "'" + splitedCommand[0] + "'"
+	if len(splitedCommand) > 1 {
+		for _, arg := range splitedCommand[1:] {
+			command += "," + "'" + arg + "'"
+		}
+	}
+	return INDENT + "def run(self):" +
+		NEWLINE +
+		ps.WidgetsToGetters() +
+		DOUBLE_INDENT + "subprocess.call([" + command + ps.WidgetToArgs() + "])" +
+		NEWLINE
+}
+
+func (ps *PythonSkeleton) CreateImport() string {
+	return "from customtkinter import *" +
+		NEWLINE +
+		"import subprocess" +
+		NEWLINE
+}
+
+func (ps *PythonSkeleton) CreateClass() string {
+	return "class Skeleton(CTk):" +
+		NEWLINE
+}
+
+func (ps *PythonSkeleton) CreateInitFunc() string {
+	return INDENT + "def __init__(self, fg_color=None, **kwargs):" +
+		NEWLINE +
+		DOUBLE_INDENT + "super().__init__(fg_color, **kwargs)" +
+		NEWLINE +
+		ps.CreateWidgets() +
+		DOUBLE_INDENT + "CTkButton(self,text=\"Run\",command=self.run).pack()" +
+		NEWLINE +
+		DOUBLE_INDENT + "self.mainloop()" +
+		NEWLINE
+}
+
+func (ps *PythonSkeleton) CreateWidgets() string {
+	retour := ""
+	for _, widget := range ps.widgets {
+		retour += widget.ToPython()
+	}
+	return retour
+}
+
+func (ps *PythonSkeleton) WidgetsToGetters() string {
+	retour := ""
+
+	for _, widget := range ps.widgets {
+		retour += widget.ToGetter()
+	}
+
+	return retour
+}
+
+func (ps *PythonSkeleton) WidgetToArgs() string {
+	retour := ""
+
+	for _, widget := range ps.widgets {
+		retour += widget.ToArg()
+	}
+
+	return retour
 }

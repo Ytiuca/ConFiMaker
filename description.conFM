@@ -1,5 +1,2 @@
-checkbox
-input
-entry
-button
-slider
+checkbox myCB 1
+checkbox myOtherCB 0
