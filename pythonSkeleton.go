@@ -121,8 +121,12 @@ func (ps *PythonSkeleton) CreateRunFunc() string {
 	return INDENT + "def run(self):" +
 		NEWLINE +
 		ps.WidgetsToGetters() +
-		DOUBLE_INDENT + "subprocess.call([" + command + ps.WidgetToArgs() + "])" +
-		NEWLINE
+		DOUBLE_INDENT + "try:" +
+		NEWLINE +
+		TRIPLE_INDENT + "subprocess.run([" + command + ps.WidgetToArgs() + "],capture_output=True,text=True,check=True)" +
+		NEWLINE +
+		GestionExceptions("subprocess.CalledProcessError", "e.stderr") +
+		GestionExceptions("Exception", "e")
 }
 
 func (ps *PythonSkeleton) CreateImport() string {
@@ -175,4 +179,15 @@ func (ps *PythonSkeleton) WidgetToArgs() string {
 	}
 
 	return retour
+}
+
+func GestionExceptions(exception string, errorVar string) string {
+	return DOUBLE_INDENT + "except " + exception + " as e:" +
+		NEWLINE +
+		TRIPLE_INDENT + "popup = CTkToplevel(self)" +
+		NEWLINE +
+		TRIPLE_INDENT + "CTkLabel(popup, text=" + errorVar + ").pack()" +
+		NEWLINE +
+		TRIPLE_INDENT + "popup.focus" +
+		NEWLINE
 }
