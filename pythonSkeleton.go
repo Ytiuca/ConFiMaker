@@ -96,6 +96,8 @@ func ToWidget(attributes []string) Widget {
 			isChecked = false
 		}
 		return newCheckbox(widgetLabel, isChecked)
+	case "input", "entry":
+		return newInput(widgetLabel, widgetOptions[0])
 	default:
 		log.Fatalf("Erreur. Ce type de widget n'est pas encore pris en charge: %s", widgetType)
 		return nil

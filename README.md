@@ -41,6 +41,22 @@ where:
 
 ![example of checkbox definition](assets/checkboxDefinition.png)
 
+#### Input/Entry
+
+If you want to use an entry you have to define it this way:
+
+    entry nameOfTheAttribute defaultValue
+
+where:
+
+`entry` is the type of the widget you want (can be either `entry` or `input`)
+
+`nameOfTheAttribute` is the name of the attribute that will be display in the GUI and given as argument to the program you want to start
+
+`defaultValue` is the default value of the input
+
+![example of checkbox definition](assets/inputDefinition.png)
+
 ### Step 3 - create a GUI
 
 execute the generated executable `ConFiMaker.exe` in the terminal of your choice with the arguments needed.

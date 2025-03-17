@@ -3,7 +3,7 @@ package main
 type Checkbox struct {
 	widgetName string
 	label      string
-	cbIntVar   string
+	IntVar     string
 	isChecked  bool
 }
 
@@ -25,16 +25,16 @@ func (cb *Checkbox) ToPython() string {
 	if cb.isChecked {
 		defaultValue = "1"
 	}
-	return DOUBLE_INDENT + cb.cbIntVar + "=IntVar(value=" + defaultValue + ")" +
+	return DOUBLE_INDENT + cb.IntVar + "=IntVar(value=" + defaultValue + ")" +
 		NEWLINE +
-		DOUBLE_INDENT + cb.label + "=" + cb.widgetName + "(self,text=\"" + cb.label + "\",variable=" + cb.cbIntVar + ")" +
+		DOUBLE_INDENT + cb.label + "=" + cb.widgetName + "(self,text=\"" + cb.label + "\",variable=" + cb.IntVar + ")" +
 		NEWLINE +
 		DOUBLE_INDENT + cb.label + ".pack()" +
 		NEWLINE
 }
 
 func (cb *Checkbox) ToGetter() string {
-	return DOUBLE_INDENT + cb.label + "=" + cb.cbIntVar + ".get()" +
+	return DOUBLE_INDENT + cb.label + "=" + cb.IntVar + ".get()" +
 		NEWLINE
 }
 
