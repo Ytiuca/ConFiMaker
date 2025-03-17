@@ -125,7 +125,9 @@ func (ps *PythonSkeleton) CreateRunFunc() string {
 		ps.WidgetsToGetters() +
 		DOUBLE_INDENT + "try:" +
 		NEWLINE +
-		TRIPLE_INDENT + "subprocess.run([" + command + ps.WidgetToArgs() + "],capture_output=True,text=True,check=True)" +
+		TRIPLE_INDENT + "subprocess.Popen([" + command + ps.WidgetToArgs() + "])" +
+		NEWLINE +
+		TRIPLE_INDENT + "exit(0)" +
 		NEWLINE +
 		GestionExceptions("subprocess.CalledProcessError", "e.stderr") +
 		GestionExceptions("Exception", "e")
