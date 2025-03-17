@@ -29,7 +29,7 @@ func (cb *Checkbox) ToPython() string {
 		NEWLINE +
 		DOUBLE_INDENT + cb.label + "=" + cb.widgetName + "(self,text=\"" + cb.label + "\",variable=" + cb.IntVar + ")" +
 		NEWLINE +
-		DOUBLE_INDENT + cb.label + ".pack()" +
+		DOUBLE_INDENT + cb.label + ".pack(pady=(0,10))" +
 		NEWLINE
 }
 

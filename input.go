@@ -21,11 +21,13 @@ func (in *Input) Name() string {
 }
 
 func (in *Input) ToPython() string {
-	return DOUBLE_INDENT + in.StringVar + "=StringVar(value=" + QUOTATION + in.defaultText + QUOTATION + ")" +
+	return DOUBLE_INDENT + "CTkLabel" + "(self,text=" + QUOTATION + in.label + QUOTATION + ").pack()" +
 		NEWLINE +
-		DOUBLE_INDENT + in.label + "=" + in.widgetName + "(self,placeholder_text=" + QUOTATION + in.label + QUOTATION + ",textvariable=" + in.StringVar + ")" +
+		DOUBLE_INDENT + in.StringVar + "=StringVar(value=" + QUOTATION + in.defaultText + QUOTATION + ")" +
 		NEWLINE +
-		DOUBLE_INDENT + in.label + ".pack()" +
+		DOUBLE_INDENT + in.label + "=" + in.widgetName + "(self,textvariable=" + in.StringVar + ")" +
+		NEWLINE +
+		DOUBLE_INDENT + in.label + ".pack(pady=(0,10))" +
 		NEWLINE
 }
 
