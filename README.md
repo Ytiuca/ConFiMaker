@@ -45,7 +45,7 @@ where:
 
 execute the generated executable `ConFiMaker.exe` in the terminal of your choice with the arguments needed.
 
-`./ConFiMaker.exe [options].
+`./ConFiMaker.exe [options]`
 
 #### Available options
 
