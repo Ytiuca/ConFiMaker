@@ -22,8 +22,6 @@ You have to describe what your GUI will looks like.
 
 - checkbox
 - input/entry
-- button
-- slider
 
 #### Checkbox
 
