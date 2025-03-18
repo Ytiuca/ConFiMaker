@@ -123,14 +123,17 @@ func (ps *PythonSkeleton) CreateRunFunc() string {
 	return INDENT + "def run(self):" +
 		NEWLINE +
 		ps.WidgetsToGetters() +
+		DOUBLE_INDENT + "error=" + QUOTATION + QUOTATION +
+		NEWLINE +
 		DOUBLE_INDENT + "try:" +
 		NEWLINE +
-		TRIPLE_INDENT + "subprocess.Popen([" + command + ps.WidgetToArgs() + "])" +
+		TRIPLE_INDENT + "self.withdraw()" +
 		NEWLINE +
-		TRIPLE_INDENT + "exit(0)" +
+		TRIPLE_INDENT + "subprocess.run([" + command + ps.WidgetToArgs() + "],capture_output=True,text=True,check=True)" +
 		NEWLINE +
 		GestionExceptions("subprocess.CalledProcessError", "e.stderr") +
-		GestionExceptions("Exception", "e")
+		GestionExceptions("Exception", "e") +
+		GestionPopUpFinally()
 }
 
 func (ps *PythonSkeleton) CreateImport() string {
@@ -188,10 +191,23 @@ func (ps *PythonSkeleton) WidgetToArgs() string {
 func GestionExceptions(exception string, errorVar string) string {
 	return DOUBLE_INDENT + "except " + exception + " as e:" +
 		NEWLINE +
-		TRIPLE_INDENT + "popup = CTkToplevel(self)" +
+		TRIPLE_INDENT + "error=" + errorVar +
+		NEWLINE
+}
+
+func GestionPopUpFinally() string {
+	return DOUBLE_INDENT + "finally:" +
 		NEWLINE +
-		TRIPLE_INDENT + "CTkLabel(popup, text=" + errorVar + ").pack()" +
+		TRIPLE_INDENT + "if error !=" + QUOTATION + QUOTATION + ":" +
 		NEWLINE +
-		TRIPLE_INDENT + "popup.focus" +
+		QUAD_INDENT + "popup=CTkToplevel(self)" +
+		NEWLINE +
+		QUAD_INDENT + "CTkLabel(popup, text=error).pack()" +
+		NEWLINE +
+		QUAD_INDENT + "popup.protocol(" + QUOTATION + "WM_DELETE_WINDOW" + QUOTATION + ", lambda: (self.deiconify(), popup.destroy()))" +
+		NEWLINE +
+		TRIPLE_INDENT + "else:" +
+		NEWLINE +
+		QUAD_INDENT + "self.deiconify()" +
 		NEWLINE
 }

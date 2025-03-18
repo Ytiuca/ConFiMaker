@@ -6,7 +6,7 @@
 
 - Go 1.23.5 (used to read the description file and write the python GUI)
 - python 3.12 (used to create the GUI with customtkinter (`pip install customtkinter`))
-- pyinstaller (used to compile le GUI (`pip install pyinstaller`))
+- pyinstaller (used to compile the GUI (`pip install pyinstaller`))
 
 ## How to use
 
@@ -23,37 +23,19 @@ You have to describe what your GUI will looks like.
 - checkbox
 - input/entry
 
-#### Checkbox
+#### Syntax
 
-If you want to use a checkbox you have to define it this way:
+The syntax is the following:
 
-    checkbox nameOfTheAttribute defaultValue
-
-where:
-
-`checkbox` is the type of the widget you want
-
-`nameOfTheAttribute` is the name of the attribute that will be display in the GUI and given as argument to the program you want to start
-
-`defaultValue` is the default value of the checkbox `0` unchecked, `1` checked
-
-![example of checkbox definition](assets/checkboxDefinition.png)
-
-#### Input/Entry
-
-If you want to use an entry you have to define it this way:
-
-    entry nameOfTheAttribute defaultValue
+`widgetName label defaultValue`
 
 where:
 
-`entry` is the type of the widget you want (can be either `entry` or `input`)
+- `widgetName` can be `checkbox`, `input` or `entry`
+- `label` is the name that will be displayed in the GUI. **`label` Must be named the same way that the matching arg from the program ([example](#example-label-naming))**.
+- `defaultValue`, when used with `input` or `entry` must be a valid boolean value.
 
-`nameOfTheAttribute` is the name of the attribute that will be display in the GUI and given as argument to the program you want to start
-
-`defaultValue` is the default value of the input
-
-![example of checkbox definition](assets/inputDefinition.png)
+![example of widget definition](assets/inputDefinition.png)
 
 ### Step 3 - create a GUI
 
@@ -68,3 +50,30 @@ execute the generated executable `ConFiMaker.exe` in the terminal of your choice
 ### Step 4 - Execute your GUI
 
 run the GUI executable. Customize the settings you created then click the button to validate, it will run the programm or command you gave your GUI.
+
+## Annexes
+
+### Example Label Naming
+
+consider the following program:
+
+```python
+[omited code]
+parser.add_argument("--myString")
+[omited code]
+```
+
+In your `description.conFM` you should do this:
+
+```conFM
+input myString defaultValue
+```
+
+and you shouldn't do:
+
+```conFM
+input anotherName defaultValue
+```
+
+Because it will trigger an error
+![error triggered](assets/errorArgName.png)

@@ -1,2 +1,2 @@
-checkbox maCbox 1
-input monInput defaut
+input myString defaultValue
+input otherString otherDefaultValue
