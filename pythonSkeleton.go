@@ -13,9 +13,10 @@ type PythonSkeleton struct {
 	widgets         []Widget
 	command         string
 	correspondances map[string]string
+	filename        string
 }
 
-func newPythonSkeleton(command string) *PythonSkeleton {
+func newPythonSkeleton(command string, filename string) *PythonSkeleton {
 	return &PythonSkeleton{
 		[]Widget{},
 		command,
@@ -26,11 +27,12 @@ func newPythonSkeleton(command string) *PythonSkeleton {
 			"button":   "CTkButton",
 			"slider":   "CTkSlider",
 		},
+		filename,
 	}
 }
 
-func (ps *PythonSkeleton) CreatePythonFile(filename string) {
-	path := "./" + filename + ".py"
+func (ps *PythonSkeleton) CreatePythonFile() {
+	path := "./" + ps.filename + ".py"
 	os.Remove(path)
 
 	file, err := os.Create(path)
@@ -153,8 +155,12 @@ func (ps *PythonSkeleton) CreateInitFunc() string {
 		NEWLINE +
 		DOUBLE_INDENT + "super().__init__(fg_color, **kwargs)" +
 		NEWLINE +
+		DOUBLE_INDENT + "self.title(" + QUOTATION + ps.filename + QUOTATION + ")" +
+		NEWLINE +
 		ps.CreateWidgets() +
 		DOUBLE_INDENT + "CTkButton(self,text=\"Run\",command=self.run).pack()" +
+		NEWLINE +
+		DOUBLE_INDENT + "self.geometry(f" + QUOTATION + "{self.winfo_height()}x{self.winfo_height()}" + QUOTATION + ")" +
 		NEWLINE +
 		DOUBLE_INDENT + "self.mainloop()" +
 		NEWLINE
