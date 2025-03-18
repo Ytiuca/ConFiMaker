@@ -45,14 +45,14 @@ execute the generated executable `ConFiMaker.exe` in the terminal of your choice
 
 #### Available options
 
-- **command** string
-    the command to be executed after the gui is set up
-- **deleteBuildFiles**
+- **command** *string*
+    the command to be executed after the gui is set up (default "")
+- **deleteBuildFiles** *bool*
     wether to remove the temp files of the build (default true)
-- **filename** string
+- **filename** *string*
     the name of the executable without the extension (default "generatedGUI")
-- **noCompil**
-    if true then the GUI won't be compilated
+- **noCompil** *bool*
+    if true then the GUI won't be compilated (default false)
 
 ### Step 4 - Execute your GUI
 
