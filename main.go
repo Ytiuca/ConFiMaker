@@ -5,11 +5,11 @@ func main() {
 	filename := (args["filename"].(string))
 	command := (args["command"].(string))
 	deleteBuildFiles := (args["deleteBuildFiles"].(bool))
-	devMode := (args["devMode"].(bool))
+	noCompil := (args["noCompil"].(bool))
 	ps := newPythonSkeleton(command, filename)
 	ps.GetFields()
 	ps.CreatePythonFile()
-	if !devMode {
+	if !noCompil {
 		ps.Build(filename, deleteBuildFiles)
 	}
 }
