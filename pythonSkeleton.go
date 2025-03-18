@@ -160,8 +160,6 @@ func (ps *PythonSkeleton) CreateInitFunc() string {
 		ps.CreateWidgets() +
 		DOUBLE_INDENT + "CTkButton(self,text=\"Run\",command=self.run).pack()" +
 		NEWLINE +
-		DOUBLE_INDENT + "self.geometry(f" + QUOTATION + "{self.winfo_height()}x{self.winfo_height()}" + QUOTATION + ")" +
-		NEWLINE +
 		DOUBLE_INDENT + "self.mainloop()" +
 		NEWLINE
 }
