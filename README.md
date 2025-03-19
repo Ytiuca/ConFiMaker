@@ -33,7 +33,7 @@ where:
 
 - `widgetName` can be `checkbox`, `input` or `entry`
 - `label` is the name that will be displayed in the GUI. **`label` Must be named the same way that the matching arg from the program ([example](#example-label-naming))**.
-- `defaultValue`, when used with `input` or `entry` must be a valid boolean value.
+- `defaultValue`, when used with `checkbox` must be a valid boolean value.
 
 ![example of widget definition](assets/inputDefinition.png)
 
