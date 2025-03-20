@@ -3,6 +3,7 @@ package main
 type Checkbox struct {
 	widgetName string
 	label      string
+	arg        string
 	IntVar     string
 	isChecked  bool
 }
@@ -11,6 +12,7 @@ func newCheckbox(label string, isChecked bool) *Checkbox {
 	return &Checkbox{
 		"CTkCheckBox",
 		"_" + label,
+		label,
 		"self." + label + "_var",
 		isChecked,
 	}
@@ -39,5 +41,5 @@ func (cb *Checkbox) ToGetter() string {
 }
 
 func (cb *Checkbox) ToArg() string {
-	return ",f" + QUOTATION + "{" + QUOTATION + "--" + cb.label + QUOTATION + "if " + cb.label + "==1 else " + QUOTATION + "--no-" + cb.label + QUOTATION + "}" + QUOTATION
+	return ",f" + QUOTATION + "{" + QUOTATION + "--" + cb.arg + QUOTATION + "if " + cb.label + "==1 else " + QUOTATION + "--no-" + cb.arg + QUOTATION + "}" + QUOTATION
 }

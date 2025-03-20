@@ -3,6 +3,7 @@ package main
 type Input struct {
 	widgetName  string
 	label       string
+	arg         string
 	StringVar   string
 	defaultText string
 }
@@ -11,6 +12,7 @@ func newInput(label string, defaultText string) *Input {
 	return &Input{
 		"CTkEntry",
 		"_" + label,
+		label,
 		"self." + label + "_var",
 		defaultText,
 	}
@@ -37,5 +39,5 @@ func (in *Input) ToGetter() string {
 }
 
 func (in *Input) ToArg() string {
-	return ",f" + QUOTATION + "--" + in.label + "={" + in.label + "}" + QUOTATION
+	return ",f" + QUOTATION + "--" + in.arg + "={" + in.label + "}" + QUOTATION
 }
