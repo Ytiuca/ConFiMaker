@@ -10,7 +10,7 @@ type Checkbox struct {
 func newCheckbox(label string, isChecked bool) *Checkbox {
 	return &Checkbox{
 		"CTkCheckBox",
-		label,
+		"_" + label,
 		"self." + label + "_var",
 		isChecked,
 	}

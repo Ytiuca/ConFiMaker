@@ -10,7 +10,7 @@ type Input struct {
 func newInput(label string, defaultText string) *Input {
 	return &Input{
 		"CTkEntry",
-		label,
+		"_" + label,
 		"self." + label + "_var",
 		defaultText,
 	}
